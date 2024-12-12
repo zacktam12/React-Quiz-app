@@ -11,6 +11,8 @@ const intialState = {
   // 'Loading','active','error','finished'
   status: "Loading",
   index: 0,
+  answer: null,
+  points: 0,
 };
 function Reducer(state, action) {
   switch (action.type) {
@@ -20,12 +22,22 @@ function Reducer(state, action) {
       return { ...state, status: "error" };
     case "start":
       return { ...state, status: "active" };
+    case "newAnswer":
+      const question = state.questions.at(state, 0);
+      return {
+        ...state,
+        answer: action.payLoad,
+        points:
+          action.payLoad === question.correctOption
+            ? state.points + question.points
+            : state.points,
+      };
     default:
       throw new Error("action not found");
   }
 }
 export default function App() {
-  const [{ status, questions, index }, dispatch] = useReducer(
+  const [{ status, questions, index, answer, point }, dispatch] = useReducer(
     Reducer,
     intialState
   );
@@ -46,7 +58,13 @@ export default function App() {
         {status === "ready" && (
           <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
         )}
-        {status === "active" && <Questions question={questions[index]} />}
+        {status === "active" && questions.length > 0 && (
+          <Questions
+            question={questions[index]}
+            dispatch={dispatch}
+            answer={answer}
+          />
+        )}
       </Main>
     </div>
   );
