@@ -5,6 +5,7 @@ import Loader from "./Loader";
 import Error from "./Error";
 import Main from "./Main";
 import Questions from "./Questions";
+import NextButton from "./NextButton";
 
 const intialState = {
   questions: [],
@@ -31,6 +32,12 @@ function Reducer(state, action) {
           action.payLoad === question.correctOption
             ? state.points + question.points
             : state.points,
+      };
+    case "nextQuestions":
+      return {
+        ...state,
+        index: state.index + 1,
+        answer: null,
       };
     default:
       throw new Error("action not found");
@@ -59,11 +66,14 @@ export default function App() {
           <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
         )}
         {status === "active" && questions.length > 0 && (
-          <Questions
-            question={questions[index]}
-            dispatch={dispatch}
-            answer={answer}
-          />
+          <>
+            <Questions
+              question={questions[index]}
+              dispatch={dispatch}
+              answer={answer}
+            />
+            <NextButton dispatch={dispatch} answer={answer} />
+          </>
         )}
       </Main>
     </div>
