@@ -4,11 +4,13 @@ import StartScreen from "./StartScreen";
 import Loader from "./Loader";
 import Error from "./Error";
 import Main from "./Main";
+import Questions from "./Questions";
 
 const intialState = {
   questions: [],
   // 'Loading','active','error','finished'
   status: "Loading",
+  index: 0,
 };
 function Reducer(state, action) {
   switch (action.type) {
@@ -16,12 +18,17 @@ function Reducer(state, action) {
       return { ...state, questions: action.payLoad, status: "ready" };
     case "dataFailed":
       return { ...state, status: "error" };
+    case "start":
+      return { ...state, status: "active" };
     default:
       throw new Error("action not found");
   }
 }
 export default function App() {
-  const [{ status }, dispatch] = useReducer(Reducer, intialState);
+  const [{ status, questions, index }, dispatch] = useReducer(
+    Reducer,
+    intialState
+  );
 
   const numQuestions = questions.length;
   useEffect(function () {
@@ -36,7 +43,10 @@ export default function App() {
       <Main>
         {status === "Loading" && <Loader />}
         {status === "error" && <Error />}
-        {status === "ready" && <StartScreen numQuestions={numQuestion} />}
+        {status === "ready" && (
+          <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
+        )}
+        {status === "active" && <Questions question={questions[index]} />}
       </Main>
     </div>
   );
