@@ -33,10 +33,10 @@ function Reducer(state, action) {
       return {
         ...state,
         status: "active",
-        secondRemaining: state.question.length * SECS_PER_QUESTION,
+        secondRemaining: state.questions.length * SECS_PER_QUESTION,
       };
     case "newAnswer":
-      const question = state.questions.at(state, 0);
+      const question = state.questions.at(state.index);
       return {
         ...state,
         answer: action.payLoad,
@@ -57,7 +57,6 @@ function Reducer(state, action) {
         status: "finished",
         highScore:
           state.points > state.highScore ? state.points : state.highScore,
-        // status: "Loading",
       };
     case "restart":
       return {
@@ -77,8 +76,16 @@ function Reducer(state, action) {
 }
 export default function App() {
   const [
-    { status, questions, index, answer, points, highScore, restart },
-    secondRemaining,
+    {
+      status,
+      questions,
+      index,
+      answer,
+      points,
+      highScore,
+      restart,
+      secondRemaining,
+    },
     dispatch,
   ] = useReducer(Reducer, intialState);
 
