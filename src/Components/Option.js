@@ -1,21 +1,26 @@
 import { useQuiz } from "../Context/QuizContext";
 
-function Option() {
-  const { question, dispatch, answer } = useQuiz();
-  const hasAnswerd = answer != null;
+function Option({ question }) {
+  const { dispatch, answer } = useQuiz();
+  const hasAnswered = answer != null;
+
+  if (!question || !Array.isArray(question.options)) {
+    console.error("Invalid question format:", question);
+    return <div>No valid options available</div>;
+  }
 
   return (
     <div className="options">
       {question.options.map((option, index) => (
         <button
           className={`btn btn-option ${index === answer ? "answer" : ""} ${
-            hasAnswerd
+            hasAnswered
               ? index === question.correctOption
                 ? "correct"
                 : "wrong"
               : ""
           }`}
-          disabled={hasAnswerd}
+          disabled={hasAnswered}
           key={option}
           onClick={() => dispatch({ type: "newAnswer", payLoad: index })}
         >

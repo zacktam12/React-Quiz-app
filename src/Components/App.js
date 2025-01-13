@@ -10,36 +10,34 @@ import Progress from "./Progress";
 import FinishedScreen from "./FinishedScreen";
 import Footer from "./Footer";
 import Timer from "./Timer";
-import { QuizProvider, useQuiz } from "../Context/QuizContext";
+import { useQuiz } from "../Context/QuizContext";
 
 // Main App Component
 export default function App() {
-  const { status, questions } = useQuiz();
+  const { status } = useQuiz();
 
   return (
-    <QuizProvider>
-      <div className="app">
-        {/* Header component */}
-        <Header className="app-header" />
+    <div className="app">
+      {/* Header component */}
+      <Header className="app-header" />
 
-        <Main>
-          {/* Conditionally render components based on the app's status */}
-          {status === "Loading" && <Loader />}
-          {status === "error" && <Error />}
-          {status === "ready" && <StartScreen />}
-          {status === "active" && questions.length > 0 && (
-            <>
-              <Progress />
-              <Questions />
-              <Timer />
-              <Footer>
-                <NextButton />
-              </Footer>
-            </>
-          )}
-          {status === "finished" && <FinishedScreen />}
-        </Main>
-      </div>
-    </QuizProvider>
+      <Main>
+        {/* Conditionally render components based on the app's status */}
+        {status === "Loading" && <Loader />}
+        {status === "error" && <Error />}
+        {status === "ready" && <StartScreen />}
+        {status === "active" && (
+          <>
+            <Progress />
+            <Questions />
+            <Timer />
+            <Footer>
+              <NextButton />
+            </Footer>
+          </>
+        )}
+        {status === "finished" && <FinishedScreen />}
+      </Main>
+    </div>
   );
 }

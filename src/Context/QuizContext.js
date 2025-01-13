@@ -101,7 +101,7 @@ function QuizProvider({ children }) {
     fetch("http://localhost:8000/questions")
       .then((res) => res.json())
       .then((data) => dispatch({ type: "dataRecieved", payLoad: data }))
-      .catch((err) => dispatch({ type: "dataFailed" }));
+      .catch(() => dispatch({ type: "dataFailed" }));
   }, []);
 
   return (
@@ -117,6 +117,7 @@ function QuizProvider({ children }) {
         secondRemaining,
         numQuestions,
         maxPossiblePoints,
+        dispatch,
       }}
     >
       {children}
